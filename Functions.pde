@@ -36,16 +36,46 @@ boolean checkObjectOfInterest(float x, float y) {
 void createAirports() { 
   
   // define new airports
-  Airport torontoP = new Airport(273, 178, "Toronto Pearson", "Toronto", "Canada", "tp.jpg");
-  Airport shanghai = new Airport(836, 198, "Shanghai Pudong International", "Shanghai", "China", "sh.jpg");
-  Airport losAngeles = new Airport(166, 184, "Los Angeles International", "Los Angeles", "United States of America", "la.jpg");
+  Airport torontoP = new Airport(273, 178, "Toronto Pearson Airport", "Toronto", "Canada", "toronto.jpg");
+  Airport shanghai = new Airport(836, 198, "Shanghai Pudong International Airport", "Shanghai", "China", "sh.jpg");
+  Airport losAngeles = new Airport(166, 184, "Los Angeles International Airport", "Los Angeles", "United States of America", "la.jpg");
   Airport miami = new Airport(277, 212, "Miami International Airport", "Miami", "United States of America", "miami.jpg");
-
+  Airport newYork = new Airport(292, 170, "John F. Kennedy International Airport", "New York City", "United States of America", "jfk.jpg");
+  Airport mexicoCity = new Airport(219, 226, "Mexico City International Airport", "Mexico City", "Mexico", "mexico.jpg");
+  Airport saoPaulo = new Airport(384, 364, "São Paulo-Guarulhos International Airport", "São Paulo", "Brazil", "saopaulo.jpg");
+  Airport buenosAires = new Airport(337, 418, "Ezeiza International Airport", "Buenos Aires", "Argentina", "bA.jpg");
+  Airport london = new Airport(498, 128, "London Heathrow Airport", "London", "United Kingdom", "london.jpg");
+  Airport paris = new Airport(525, 160, "Charles de Gaulle Airport", "Paris", "France", "paris.jpg");
+  Airport cairo = new Airport(610, 225, "Cairo International Airport", "Cairo", "Egypt", "cairo.jpg");
+  Airport johannesburg = new Airport(592, 348, "O. R. Tambo International Airport", "Johannesburg", "South Africa", "johannesburg.jpg");
+  Airport tokyo = new Airport(888, 182, "Tokyo Haneda Airport", "Tokyo", "Japan", "tokyo.jpg");
+  Airport dubai = new Airport(654, 217, "Dubai International Airport", "Dubai", "United Arab Emirates", "dubai.jpg");
+  Airport sydney = new Airport(919, 408, "Sydney Kingsford Smith Airport", "Sydney", "Australia", "sydney.jpg");
+  Airport auckland = new Airport(983, 417, "Auckland Airport", "Auckland", "New Zealand", "auckland.jpg");
+  Airport antarctica1 = new Airport(620, 560, "McMurdo Airfield", "McMurdo Station", "Antarctica", "antarctica.jpg");
+  Airport southpole = new Airport(700, 575, "Amundsen–Scott South Pole Station", "South Pole", "Antarctica", "southpole.jpg");
+ 
   // add airports to list
   airports.add(torontoP);
   airports.add(shanghai);
   airports.add(losAngeles);
   airports.add(miami);
+  airports.add(newYork);
+  airports.add(mexicoCity);
+  airports.add(saoPaulo);
+  airports.add(buenosAires);
+  airports.add(london);
+  airports.add(paris);
+  airports.add(cairo);
+  airports.add(johannesburg);
+  airports.add(tokyo);
+  airports.add(dubai);
+  airports.add(sydney);
+  airports.add(auckland);
+  airports.add(antarctica1);
+  airports.add(southpole);
+
+
 }
 
 // populate G4P dropdown lists

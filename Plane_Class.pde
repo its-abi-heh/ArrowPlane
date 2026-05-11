@@ -1,5 +1,5 @@
 // PLANE CLASS
-
+// change this.x_pos to pVector
 class Plane {
 
   // VARIABLES & FIELDS
