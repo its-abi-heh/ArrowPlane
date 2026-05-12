@@ -1,4 +1,56 @@
+void drawCompass(float x, float y, float size, float angle) {
 
+  // Outer circle
+  stroke(0);
+  strokeWeight(2);
+  fill(240);
+  ellipse(x, y, size, size);
+
+  // Inner circle
+  fill(255);
+  ellipse(x, y, size * 0.85, size * 0.85);
+
+  // Labels
+  fill(0);
+  textAlign(CENTER, CENTER);
+  textSize(size * 0.12);
+
+  text("N", x, y - size * 0.42);
+  text("S", x, y + size * 0.42);
+  text("E", x + size * 0.42, y);
+  text("W", x - size * 0.42, y);
+
+  // Needle tip positions
+  float nx = x + cos(angle) * size * 0.35;
+  float ny = y + sin(angle) * size * 0.35;
+
+  float sx = x - cos(angle) * size * 0.35;
+  float sy = y - sin(angle) * size * 0.35;
+
+  // Perpendicular offsets for triangle width
+  float px = cos(angle + HALF_PI) * size * 0.05;
+  float py = sin(angle + HALF_PI) * size * 0.05;
+
+  // North needle (red)
+  fill(255, 0, 0);
+  triangle(
+    nx, ny,
+    x - px, y - py,
+    x + px, y + py
+  );
+
+  // South needle (gray)
+  fill(100);
+  triangle(
+    sx, sy,
+    x - px, y - py,
+    x + px, y + py
+  );
+
+  // Center dot
+  fill(0);
+  ellipse(x, y, size * 0.06, size * 0.06);
+}
 void drawLegend() {
   
   
