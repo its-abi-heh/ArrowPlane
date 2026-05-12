@@ -78,10 +78,6 @@ synchronized public void createPlaneWindow(PApplet appc, GWinData data) { //_COD
   appc.background(230);
 } //_CODE_:PlaneWindow:600548:
 
-public void speedChanged(GSlider source, GEvent event) { //_CODE_:newSpeed:396061:
-  selectedPlane.speed = newSpeed.getValueF();
-} //_CODE_:newSpeed:396061:
-
 public void pathVisibilityChanged(GCheckbox source, GEvent event) { //_CODE_:togglePath:714996:
   selectedPlane.showPath = !selectedPlane.showPath;
 } //_CODE_:togglePath:714996:
@@ -94,6 +90,14 @@ public void trailVisibilityChanged(GCheckbox source, GEvent event) { //_CODE_:to
 public void searchRVisibilityChanged(GCheckbox source, GEvent event) { //_CODE_:toggleR:845871:
   selectedPlane.showRadius = !selectedPlane.showRadius;
 } //_CODE_:toggleR:845871:
+
+public void planeVisibilityChanged(GCheckbox source, GEvent event) { //_CODE_:togglePlane:731911:
+  selectedPlane.visible = !selectedPlane.visible;
+} //_CODE_:togglePlane:731911:
+
+public void speedChanged(GSlider source, GEvent event) { //_CODE_:speedSlider:770580:
+  selectedPlane.speed = speedSlider.getValueF();
+} //_CODE_:speedSlider:770580:
 
 
 
@@ -129,10 +133,10 @@ public void createGUI(){
   label4 = new GLabel(flightCommandWindow, 20, 190, 80, 20);
   label4.setText("Arrival Airport");
   label4.setOpaque(false);
-  departureList = new GDropList(flightCommandWindow, 140, 160, 180, 100, 4, 10);
+  departureList = new GDropList(flightCommandWindow, 140, 160, 180, 220, 10, 10);
   departureList.setItems(loadStrings("list_786137"), 0);
   departureList.addEventHandler(this, "departureSelected");
-  arrivalList = new GDropList(flightCommandWindow, 140, 190, 180, 80, 3, 10);
+  arrivalList = new GDropList(flightCommandWindow, 140, 190, 180, 220, 10, 10);
   arrivalList.setItems(loadStrings("list_423776"), 0);
   arrivalList.addEventHandler(this, "arrivalSelected");
   addPlane = new GButton(flightCommandWindow, 20, 220, 100, 30);
@@ -154,40 +158,46 @@ public void createGUI(){
   panel1.setText("Tab bar text");
   panel1.setOpaque(true);
   panel1.addEventHandler(this, "panel1_Click1");
-  PlaneWindow = GWindow.getWindow(this, "Configure Flight Metrics", 1350, 0, 240, 300, JAVA2D);
+  PlaneWindow = GWindow.getWindow(this, "Configure Flight Metrics", 1350, 0, 200, 300, JAVA2D);
   PlaneWindow.noLoop();
   PlaneWindow.setActionOnClose(G4P.CLOSE_WINDOW);
   PlaneWindow.addDrawHandler(this, "createPlaneWindow");
-  selectedPlaneTitle = new GLabel(PlaneWindow, 10, 20, 210, 60);
+  selectedPlaneTitle = new GLabel(PlaneWindow, 8, 8, 176, 60);
   selectedPlaneTitle.setText("selectedPlaneName");
   selectedPlaneTitle.setOpaque(false);
-  label6 = new GLabel(PlaneWindow, 10, 90, 210, 20);
+  label6 = new GLabel(PlaneWindow, 8, 72, 176, 20);
   label6.setText("Increase Base Speed:");
   label6.setOpaque(false);
-  newSpeed = new GSlider(PlaneWindow, 10, 120, 210, 50, 10.0);
-  newSpeed.setShowValue(true);
-  newSpeed.setShowLimits(true);
-  newSpeed.setLimits(1.0, 0.5, 5.0);
-  newSpeed.setShowTicks(true);
-  newSpeed.setNumberFormat(G4P.DECIMAL, 2);
-  newSpeed.setLocalColorScheme(GCScheme.ORANGE_SCHEME);
-  newSpeed.setOpaque(false);
-  newSpeed.addEventHandler(this, "speedChanged");
-  togglePath = new GCheckbox(PlaneWindow, 10, 180, 210, 20);
+  togglePath = new GCheckbox(PlaneWindow, 10, 170, 184, 20);
   togglePath.setIconAlign(GAlign.LEFT, GAlign.MIDDLE);
   togglePath.setText("Toggle path visibility");
   togglePath.setOpaque(false);
   togglePath.addEventHandler(this, "pathVisibilityChanged");
-  toggleTrail = new GCheckbox(PlaneWindow, 10, 210, 210, 20);
+  toggleTrail = new GCheckbox(PlaneWindow, 10, 200, 160, 20);
   toggleTrail.setIconAlign(GAlign.LEFT, GAlign.MIDDLE);
   toggleTrail.setText("Toggle trail visibility");
   toggleTrail.setOpaque(false);
   toggleTrail.addEventHandler(this, "trailVisibilityChanged");
-  toggleR = new GCheckbox(PlaneWindow, 10, 240, 210, 20);
+  toggleR = new GCheckbox(PlaneWindow, 8, 224, 160, 40);
   toggleR.setIconAlign(GAlign.LEFT, GAlign.MIDDLE);
   toggleR.setText("Toggle search radius visibility");
   toggleR.setOpaque(false);
   toggleR.addEventHandler(this, "searchRVisibilityChanged");
+  togglePlane = new GCheckbox(PlaneWindow, 10, 271, 152, 20);
+  togglePlane.setIconAlign(GAlign.LEFT, GAlign.MIDDLE);
+  togglePlane.setText("Toggle plane visibility");
+  togglePlane.setOpaque(false);
+  togglePlane.addEventHandler(this, "planeVisibilityChanged");
+  togglePlane.setSelected(true);
+  speedSlider = new GSlider(PlaneWindow, 8, 104, 170, 56, 10.0);
+  speedSlider.setShowValue(true);
+  speedSlider.setShowLimits(true);
+  speedSlider.setLimits(1.0, 0.5, 5.0);
+  speedSlider.setShowTicks(true);
+  speedSlider.setNumberFormat(G4P.DECIMAL, 2);
+  speedSlider.setLocalColorScheme(GCScheme.ORANGE_SCHEME);
+  speedSlider.setOpaque(false);
+  speedSlider.addEventHandler(this, "speedChanged");
   flightCommandWindow.loop();
   PlaneWindow.loop();
 }
@@ -211,7 +221,8 @@ GPanel panel1;
 GWindow PlaneWindow;
 GLabel selectedPlaneTitle; 
 GLabel label6; 
-GSlider newSpeed; 
 GCheckbox togglePath; 
 GCheckbox toggleTrail; 
 GCheckbox toggleR; 
+GCheckbox togglePlane; 
+GSlider speedSlider; 

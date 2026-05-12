@@ -11,7 +11,7 @@ class Plane {
   // Used to draw the green trail behind the aircraft
   ArrayList<PVector> trail;
 
-  String departureName, arrivalName, imgPath;
+  String departureName, arrivalName;
   String bearing = "CURRENTLY BOARDING";       // Current compass direction of the plane
   
   // velocity = combined components vx, vy
@@ -23,10 +23,12 @@ class Plane {
   boolean visible, showPath, showTrail, showRadius, arrived;
   boolean avoidPlanes = true;
   boolean avoidWeather = true;
-
+  
+  PImage planeImg;
+  
   // CONSTRUCTOR
   Plane(Airport d, Airport a, String fp) {
-    this.imgPath = fp;
+    this.planeImg = loadImage(fp);
     this.visible = true;
     this.showPath = false;
     this.showTrail = true;
@@ -164,6 +166,9 @@ class Plane {
 
   // draw the plane and other effects (trail, desired path, e.t.c)
   void display() {
+  
+    // calculate plane rotation angle = arctan(vy/vx)
+    float angle = atan2(vy, vx);
 
     // draw direct path from departure to arrival airport as a GREEN line
     if (showPath) {
@@ -199,19 +204,14 @@ class Plane {
     }
     
     // draw the actual plane
-    if (visible) {
-    
-      // calculate plane rotation angle = arctan(vy/vx)
-      float angle = atan2(vy, vx);
-    
+    if (visible) {    
       // use push and pop matrix to rotate the image
       pushMatrix();
+      
       translate(x_pos, y_pos);
       rotate(angle);
       imageMode(CENTER);
-
-      // draw the plane using the filepath assigned during declaration
-      image(loadImage(this.imgPath), 0, 0, 30, 30);
+      image(this.planeImg, 0, 0, 30, 30);
       
       popMatrix();
     
@@ -219,7 +219,19 @@ class Plane {
       // since draw() is on loop, this is needed
       imageMode(CORNER);
     }
-
+    
+    // draw arrowhead if plane is not visible (ARROWPLANE >:])
+    else {
+      fill(appTheme[2][0], appTheme[2][1], appTheme[2][2]);
+      
+      pushMatrix();
+    
+      translate(x_pos, y_pos);
+      rotate(angle);
+      triangle(12, 0, -8, -6, -8, 6);
+    
+      popMatrix();
+    }
   }
 
   // calculate compass direction of the plane

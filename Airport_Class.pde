@@ -36,14 +36,38 @@ class Airport {
 
   // used to display information about the airports to the user
   void drawTag() {
+    float tagWidth = 200;
+    float tagHeight = 225;
+    float tagX = x_pos;
+    float tagY = y_pos;
+
+    // if tag would go below screen, draw upward
+    if (tagY + tagHeight > height) {
+      tagY = y_pos - tagHeight;
+    }
+  
+    // prevent going above screen
+    if (tagY < 0) {
+      tagY = 0;
+    }
+  
+    // if tag would go off right side
+    if (tagX + tagWidth > width) {
+      tagX = width - tagWidth;
+    }
+  
+    // prevent going off left side
+    if (tagX < 0) {
+      tagX = 0;
+    }
+  
     fill(255, 255, 224);
-    rect(x_pos, y_pos, 200, 225);
-
-    // use self created image function to resize the airport img to fit the tag
-    image(this.img, x_pos + 10, y_pos + 10, 180, 130);
-
+    rect(tagX, tagY, tagWidth, tagHeight);
+    image(this.img, tagX + 10, tagY + 10, 180, 130);
     fill(0);
-    text(name + " airport", this.x_pos + 10, this.y_pos + 160);
-    text("Location: " + this.city + ", " + this.country, this.x_pos + 10, this.y_pos + 180);
+    textAlign(LEFT, TOP);
+    
+    text(name + " airport", tagX + 10, tagY + 145, 180, 40);
+    text("Location: " + city + ", " + country, tagX + 10, tagY + 175, 180, 50);  
   }
 }

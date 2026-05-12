@@ -19,7 +19,7 @@ Plane selectedPlane = null;
 String[] possibleDestinations;
 String selectedType = "";
 
-int[][] appTheme = {{255, 255, 224}, {255, 0, 0}};
+int[][] appTheme = {{255, 255, 224}, {255, 0, 0}, {0, 0, 255}};
 
 boolean started, running;
 
