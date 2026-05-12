@@ -1,4 +1,4 @@
-/*
+/* MAIN
  * ARROWPLANE- Air Traffic Control Simulator
  * Code Written By:  Zack Boone, Abigail Chan, Fedor Kuznetsov
  * Date Submitted:
@@ -11,9 +11,6 @@ import g4p_controls.*;
 // VARIABLES
 ArrayList<Airport> airports;
 ArrayList<Plane> planes;
-
-Airport departure, arrival;
-Plane selectedPlane = null;
 
 String[] possibleDestinations;
 String selectedType = "";
@@ -28,6 +25,15 @@ PImage map;
 float kmScale = 18;
 float velocityScale = 320;
 int searchR = 10;   // adjust sensitivity of the hover and mouse press funcitons
+int num_winds = 3; //Number of wind currents on the map
+int num_clouds = 10; //Number of clouds on the map
+boolean showClouds = false;
+
+// initialize class objects
+Airport departure, arrival;
+Plane selectedPlane = null;
+Weather[] winds = new Weather[num_winds];
+Weather[] clouds = new Weather[num_clouds];
 
 void setup() {
   
@@ -43,6 +49,9 @@ void setup() {
   
   // populate airports array list
   createAirports();
+  
+  // populate weather array list
+  createWeather();
   
   // G4P stuff- create command window, plane window is not visible
   createGUI();
@@ -91,6 +100,20 @@ void draw() {
 
         p.update(planes);
         p.display();
+      }
+    }
+    
+    for (int i = 0; i < num_winds; i++) {
+      winds[i].update();
+      winds[i].drawMe();
+      for (Plane p : planes) {
+        winds[i].affectPlane(p);
+      }
+    }
+
+    if (showClouds) {
+      for (int i = 0; i < num_clouds; i++) {
+        clouds[i].drawMe();
       }
     }
   }

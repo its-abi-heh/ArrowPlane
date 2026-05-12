@@ -1,3 +1,19 @@
+void createWeather() {
+  for (int i = 0; i < num_winds; i++) {
+    float x = random(width);
+    float y = random(height);
+    float r = random(80, 200);
+    winds[i] = new Weather("Wind", x, y, r);
+  }
+  
+  for (int i = 0; i < num_clouds; i++) {
+  float x = random(width);
+  float y = random(height);
+  float r = random(40, 100);
+  clouds[i] = new Weather("Cloud", x, y, r);
+  }
+}
+
 void createCompass(float x, float y, float size) {
 
   // Outer circle
