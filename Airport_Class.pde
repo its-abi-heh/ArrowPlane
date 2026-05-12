@@ -30,6 +30,7 @@ class Airport {
   // METHODS
   // used to draw the location of the airport on screen
   void drawPoint() {
+    stroke(0);
     fill(ptColor[0], ptColor[1], ptColor[2]);
     circle(this.x_pos, this.y_pos, 10);
   }

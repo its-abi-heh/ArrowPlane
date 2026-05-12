@@ -70,9 +70,15 @@ public void pauseButtonClicked(GButton source, GEvent event) { //_CODE_:pauseBut
   }
 } //_CODE_:pauseButton:377502:
 
-public void panel1_Click1(GPanel source, GEvent event) { //_CODE_:panel1:326748:
-  println("panel1 - GPanel >> GEvent." + event + " @ " + millis());
-} //_CODE_:panel1:326748:
+public void compassVisibilityChanged(GCheckbox source, GEvent event) { //_CODE_:toggleCompass:708015:
+  if (toggleCompass.isSelected()) {
+    drawCompass = true;
+  }
+  else {
+    drawCompass = false; 
+  }
+  
+} //_CODE_:toggleCompass:708015:
 
 synchronized public void createPlaneWindow(PApplet appc, GWinData data) { //_CODE_:PlaneWindow:600548:
   appc.background(230);
@@ -112,15 +118,15 @@ public void createGUI(){
   flightCommandWindow.noLoop();
   flightCommandWindow.setActionOnClose(G4P.KEEP_OPEN);
   flightCommandWindow.addDrawHandler(this, "drawFlightControlWindow");
-  startButton = new GButton(flightCommandWindow, 20, 80, 80, 30);
+  startButton = new GButton(flightCommandWindow, 19, 50, 80, 30);
   startButton.setText("START");
   startButton.setLocalColorScheme(GCScheme.GREEN_SCHEME);
   startButton.addEventHandler(this, "startButtonClicked");
-  label1 = new GLabel(flightCommandWindow, 20, 50, 149, 20);
+  label1 = new GLabel(flightCommandWindow, 21, 21, 149, 20);
   label1.setTextAlign(GAlign.CENTER, GAlign.MIDDLE);
   label1.setText("SIMULATION CONTROLS");
   label1.setOpaque(false);
-  clearFlights = new GButton(flightCommandWindow, 110, 80, 111, 30);
+  clearFlights = new GButton(flightCommandWindow, 110, 49, 111, 30);
   clearFlights.setText("CLEAR FLIGHTS");
   clearFlights.setLocalColorScheme(GCScheme.ORANGE_SCHEME);
   clearFlights.addEventHandler(this, "clearButtonClicked");
@@ -150,14 +156,15 @@ public void createGUI(){
   label5 = new GLabel(flightCommandWindow, 20, 270, 240, 20);
   label5.setText("COMMUNICATION PANEL");
   label5.setOpaque(false);
-  pauseButton = new GButton(flightCommandWindow, 230, 80, 90, 30);
+  pauseButton = new GButton(flightCommandWindow, 228, 48, 90, 30);
   pauseButton.setText("PAUSE");
   pauseButton.setLocalColorScheme(GCScheme.YELLOW_SCHEME);
   pauseButton.addEventHandler(this, "pauseButtonClicked");
-  panel1 = new GPanel(flightCommandWindow, 360, 60, 100, 80, "Tab bar text");
-  panel1.setText("Tab bar text");
-  panel1.setOpaque(true);
-  panel1.addEventHandler(this, "panel1_Click1");
+  toggleCompass = new GCheckbox(flightCommandWindow, 21, 93, 203, 20);
+  toggleCompass.setIconAlign(GAlign.LEFT, GAlign.MIDDLE);
+  toggleCompass.setText("Toggle compass");
+  toggleCompass.setOpaque(false);
+  toggleCompass.addEventHandler(this, "compassVisibilityChanged");
   PlaneWindow = GWindow.getWindow(this, "Configure Flight Metrics", 1350, 0, 200, 300, JAVA2D);
   PlaneWindow.noLoop();
   PlaneWindow.setActionOnClose(G4P.CLOSE_WINDOW);
@@ -217,7 +224,7 @@ GButton addPlane;
 GTextArea informationBox; 
 GLabel label5; 
 GButton pauseButton; 
-GPanel panel1; 
+GCheckbox toggleCompass; 
 GWindow PlaneWindow;
 GLabel selectedPlaneTitle; 
 GLabel label6; 

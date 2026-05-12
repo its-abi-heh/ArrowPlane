@@ -1,15 +1,11 @@
-void drawCompass(float x, float y, float size, float angle) {
+void createCompass(float x, float y, float size) {
+
   // Outer circle
   stroke(0);
-  strokeWeight(2);
   fill(240);
   ellipse(x, y, size, size);
 
-  // Inner circle
-  fill(255);
-  ellipse(x, y, size * 0.85, size * 0.85);
-
-  // Labels
+  // labels
   fill(0);
   textAlign(CENTER, CENTER);
   textSize(size * 0.12);
@@ -19,27 +15,24 @@ void drawCompass(float x, float y, float size, float angle) {
   text("E", x + size * 0.42, y);
   text("W", x - size * 0.42, y);
 
-  // Needle tip positions
-  float nx = x + cos(angle) * size * 0.35;
-  float ny = y + sin(angle) * size * 0.35;
-
-  float sx = x - cos(angle) * size * 0.35;
-  float sy = y - sin(angle) * size * 0.35;
-
-  // Perpendicular offsets for triangle width
-  float px = cos(angle + HALF_PI) * size * 0.05;
-  float py = sin(angle + HALF_PI) * size * 0.05;
-
-  // North needle (red)
+  // north needle (red)
   fill(255, 0, 0);
-  triangle(nx, ny, x - px, y - py, x + px, y + py);
+  triangle(x, y - size * 0.35, x - size * 0.05, y, x + size * 0.05, y);
 
   // South needle (gray)
   fill(100);
-  triangle(sx, sy, x - px, y - py, x + px, y + py);
+  triangle(x, y + size * 0.35, x - size * 0.05, y, x + size * 0.05, y);
+
+  // West needle (green)
+  fill(0, 255, 0);
+  triangle(x, y, x + size * 0.05, y, x + size * 0.05, y);
+
+  // East needle (blue)
+  fill(0, 0, 255);
+  triangle(x, y + size * 0.35, x - size * 0.05, y, x + size * 0.05, y);
 
   // Center dot
-  fill(0); 
+  fill(0);
   ellipse(x, y, size * 0.06, size * 0.06);
 }
 

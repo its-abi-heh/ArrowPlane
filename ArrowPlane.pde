@@ -20,7 +20,7 @@ String selectedType = "";
 
 int[][] appTheme = {{255, 255, 224}, {255, 0, 0}, {0, 0, 255}};
 
-boolean started, running;
+boolean started, running, drawCompass;
 
 PImage map;
 
@@ -33,6 +33,7 @@ void setup() {
   
   // load map background image
   map = loadImage("map1.jpg");
+ 
   size(1000, 600);
   surface.setLocation(350, 0); // use setLocation to ensure windows don't overlap
   
@@ -56,6 +57,11 @@ void draw() {
   // draw image background
   image(map, 0, 0, width, height);
 
+  // check boolean to draw compass (controlled by checkbox on G4P window
+  if (drawCompass == true) {
+      createCompass(100, 100, 100); 
+  }
+  
   // draw airports
   for (Airport a : airports) {
     a.drawPoint();
