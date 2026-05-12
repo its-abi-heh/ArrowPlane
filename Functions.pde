@@ -5,7 +5,7 @@ void createCompass(float x, float y, float size) {
   fill(240);
   ellipse(x, y, size, size);
 
-  // labels
+  // Labels
   fill(0);
   textAlign(CENTER, CENTER);
   textSize(size * 0.12);
@@ -15,21 +15,37 @@ void createCompass(float x, float y, float size) {
   text("E", x + size * 0.42, y);
   text("W", x - size * 0.42, y);
 
-  // north needle (red)
+  // North needle (red)
   fill(255, 0, 0);
-  triangle(x, y - size * 0.35, x - size * 0.05, y, x + size * 0.05, y);
+  triangle(
+    x, y - size * 0.35,
+    x - size * 0.05, y,
+    x + size * 0.05, y
+  );
 
   // South needle (gray)
   fill(100);
-  triangle(x, y + size * 0.35, x - size * 0.05, y, x + size * 0.05, y);
+  triangle(
+    x, y + size * 0.35,
+    x - size * 0.05, y,
+    x + size * 0.05, y
+  );
 
-  // West needle (green)
-  fill(0, 255, 0);
-  triangle(x, y, x + size * 0.05, y, x + size * 0.05, y);
+// EAST needle (blue)
+  fill(0, 100, 255);
+  triangle(
+    x + size * 0.35, y,
+    x, y - size * 0.05,
+    x, y + size * 0.05
+  );
 
-  // East needle (blue)
-  fill(0, 0, 255);
-  triangle(x, y + size * 0.35, x - size * 0.05, y, x + size * 0.05, y);
+  // WEST needle (green)
+  fill(0, 180, 100);
+  triangle(
+    x - size * 0.35, y,
+    x, y - size * 0.05,
+    x, y + size * 0.05
+  );
 
   // Center dot
   fill(0);
