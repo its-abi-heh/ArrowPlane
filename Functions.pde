@@ -1,4 +1,4 @@
-void drawCompass(float x, float y, float size, float angle) {
+void drawCompass(float x, float y, float size) {
 
   // Outer circle
   stroke(0);
@@ -20,42 +20,26 @@ void drawCompass(float x, float y, float size, float angle) {
   text("E", x + size * 0.42, y);
   text("W", x - size * 0.42, y);
 
-  // Needle tip positions
-  float nx = x + cos(angle) * size * 0.35;
-  float ny = y + sin(angle) * size * 0.35;
-
-  float sx = x - cos(angle) * size * 0.35;
-  float sy = y - sin(angle) * size * 0.35;
-
-  // Perpendicular offsets for triangle width
-  float px = cos(angle + HALF_PI) * size * 0.05;
-  float py = sin(angle + HALF_PI) * size * 0.05;
-
   // North needle (red)
   fill(255, 0, 0);
   triangle(
-    nx, ny,
-    x - px, y - py,
-    x + px, y + py
+    x, y - size * 0.35,
+    x - size * 0.05, y,
+    x + size * 0.05, y
   );
 
   // South needle (gray)
   fill(100);
   triangle(
-    sx, sy,
-    x - px, y - py,
-    x + px, y + py
+    x, y + size * 0.35,
+    x - size * 0.05, y,
+    x + size * 0.05, y
   );
 
   // Center dot
   fill(0);
   ellipse(x, y, size * 0.06, size * 0.06);
 }
-void drawLegend() {
-  
-  
-}
-
 
 // update the text area box (communication panel) with information on a selected object
 void updateInformationBox() {
