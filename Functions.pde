@@ -40,7 +40,6 @@ void drawCompass(float x, float y, float size) {
   fill(0);
   ellipse(x, y, size * 0.06, size * 0.06);
 }
-
 // update the text area box (communication panel) with information on a selected object
 void updateInformationBox() {
   String text;
