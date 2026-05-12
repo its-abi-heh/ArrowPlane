@@ -1,8 +1,7 @@
 void drawCompass(float x, float y, float size) {
 
   // Outer circle
-  stroke(0);
-  strokeWeight(2);
+  stroke(0); strokeWeight(2);
   fill(240);
   ellipse(x, y, size, size);
 
@@ -22,35 +21,19 @@ void drawCompass(float x, float y, float size) {
 
   // North needle (red)
   fill(255, 0, 0);
-  triangle(
-    x, y - size * 0.35,
-    x - size * 0.05, y,
-    x + size * 0.05, y
-  );
+  triangle(x, y - size * 0.35, x - size * 0.05, y, x + size * 0.05, y);
 
   // South needle (gray)
   fill(100);
-  triangle(
-    x, y + size * 0.35,
-    x - size * 0.05, y,
-    x + size * 0.05, y
-  );
+  triangle(x, y + size * 0.35, x - size * 0.05, y, x + size * 0.05, y);
 
 // EAST needle (blue)
   fill(0, 100, 255);
-  triangle(
-    x + size * 0.35, y,
-    x, y - size * 0.05,
-    x, y + size * 0.05
-  );
+  triangle(x + size * 0.35, y, x, y - size * 0.05, x, y + size * 0.05);
 
   // WEST needle (green)
   fill(0, 180, 100);
-  triangle(
-    x - size * 0.35, y,
-    x, y - size * 0.05,
-    x, y + size * 0.05
-  );
+  triangle(x - size * 0.35, y, x, y - size * 0.05, x, y + size * 0.05);
 
   // Center dot
   fill(0);
