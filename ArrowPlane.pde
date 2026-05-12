@@ -57,30 +57,61 @@ void draw() {
   // draw image background
   image(map, 0, 0, width, height);
 
-  // draw airports
+  Airport hoveredAirport = null;
+
+  // find hovered airport
   for (Airport a : airports) {
-    a.drawPoint();
-    
-    // if user has hovered over the airport, display tag information
     if (checkObjectOfInterest(a.x_pos, a.y_pos)) {
-     a.drawTag(); 
+      hoveredAirport = a;
     }
   }
 
-  // draw planes whenever they are added
+  // draw tag first
+  if (hoveredAirport != null) {
+    hoveredAirport.drawTag();
+  }
+
+  // draw airport points
+  for (Airport a : airports) {
+
+    boolean coveredByTag = false;
+
+    // if a tag exists, check whether this airport is inside tag area
+    if (hoveredAirport != null) {
+
+      float tagX = hoveredAirport.x_pos + 15;
+      float tagY = hoveredAirport.y_pos - 40;
+
+      float tagW = 140;
+      float tagH = 50;
+
+      if (a.x_pos > tagX &&
+          a.x_pos < tagX + tagW &&
+          a.y_pos > tagY &&
+          a.y_pos < tagY + tagH) {
+
+        coveredByTag = true;
+      }
+    }
+
+    // only draw visible airports
+    if (!coveredByTag) {
+      a.drawPoint();
+    }
+  }
+
+  // planes
   if (!started || !running) {
 
     for (int i = 0; i < planes.size(); i++) {
       Plane p = planes.get(i);
       p.display();
     }
-  }
-  else {
-    
-    // if the simulation is running
+
+  } else {
+
     if (running) {
-      
-      // for each plane, update their position and draw them on screen
+
       for (int i = 0; i < planes.size(); i++) {
         Plane p = planes.get(i);
 
@@ -89,8 +120,6 @@ void draw() {
       }
     }
   }
-  
-  // the info box displays information to the user and must be updated constantly
-  // to check for items of interest
+
   updateInformationBox();
 }
