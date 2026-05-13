@@ -84,21 +84,21 @@ void draw() {
   // draw planes whenever they are added
   if (!started || !running) {
 
-    for (int i = 0; i < planes.size(); i++) {
+    for (int i = planes.size() - 1; i >= 0; i--) {
       Plane p = planes.get(i);
       p.display();
     }
   }
+  
+  // if the simulation is running
   else {
-    
-    // if the simulation is running
     if (running) {
       
       // for each plane, update their position and draw them on screen
-      for (int i = 0; i < planes.size(); i++) {
+      for (int i = planes.size() - 1; i >= 0; i--) {
         Plane p = planes.get(i);
 
-        p.update(planes);
+        p.update();
         p.display();
       }
     }
@@ -106,7 +106,8 @@ void draw() {
     for (int i = 0; i < num_winds; i++) {
       winds[i].update();
       winds[i].drawMe();
-      for (Plane p : planes) {
+      for (int j = planes.size() - 1; j >= 0; j--) {
+        Plane p = planes.get(j);        
         winds[i].affectPlane(p);
       }
     }

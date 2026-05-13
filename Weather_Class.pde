@@ -89,16 +89,31 @@ class Weather {
       popMatrix(); //Reset for the next arrow
     }
   }
+
+  // push the plane by changing its velocity
   void affectPlane(Plane p) {
-    float d = dist(this.position.x, this.position.y, p.x_pos, p.y_pos);
+  
+    // calculate distance between the wind and the plane
+    float d = dist(this.position.x, this.position.y, p.pos.x, p.pos.y);
+  
+    // if the distance is smaller than the effective radius of the wind
     if (d < this.radius) {
       if (this.type.equals("Wind")) {
-        p.vx += windForce.x * 0.05;
-        p.vy += windForce.y * 0.05;
-      } 
-      else if (this.type.equals("Storm")) { //Not finished
-        p.vx *= 0.95;
-        p.vy *= 0.95;
+  
+        // stronger wind near center of the wind
+        // so use map to scale the wind strength relative to the distance from the wind's center
+        float strength = map(d, 0, radius, 0.01, 0.001);
+  
+        // push plane velocity
+        p.vel.x += windForce.x * strength;
+        p.vel.y += windForce.y * strength;
+      }
+  
+      else if (this.type.equals("Storm")) {
+  
+        // slow down the plane by 0.02; but since the plane velocity is a PVector
+        // you can't use * so use mult instead
+        p.vel.mult(0.98);
       }
     }
   }

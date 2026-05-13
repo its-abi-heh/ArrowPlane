@@ -1,28 +1,33 @@
 // PLANE CLASS
-// change this.x_pos to pVector
+
 class Plane {
 
   // VARIABLES & FIELDS
   
-  // Airport objects for the starting and ending airports
+  // airport objects for the starting and ending airports
   Airport departure, arrival;
   
-  // Stores all previous positions of the plane
-  // Used to draw the green trail behind the aircraft
+  // stores all previous positions of the plane
+  // used to draw the green trail behind the aircraft
   ArrayList<PVector> trail;
 
-  String departureName, arrivalName;
-  String bearing = "CURRENTLY BOARDING";       // Current compass direction of the plane
+  String departureName, arrivalName, bearing;
   
   // velocity = combined components vx, vy
-  float x_pos, y_pos, vx, vy, speed, velocity, 
+  float vx, vy, speed, velocity, 
         dx, dy, d, searchRadius, aggression;
+        
   float totalDistanceTravelled = 0;
   float elapsedHours = 0;      // time spent traveling
   float planeSize = 30;
+  
   boolean visible, showPath, showTrail, showRadius, arrived;
   boolean avoidPlanes = true;
   boolean avoidWeather = true;
+
+  // use PVectors for position and velocity
+  PVector pos;
+  PVector vel;
   
   PImage planeImg;
   
@@ -33,6 +38,7 @@ class Plane {
     this.showPath = false;
     this.showTrail = true;
     this.showRadius = false;
+    this.bearing = "CURRENTLY BOARDING";
     
     // can be adjusted in Plane g4p window
     this.searchRadius = 60;
@@ -44,26 +50,29 @@ class Plane {
     this.arrival = a;
 
     // plane starts at departure airport coordinates
-    x_pos = departure.x_pos;
-    y_pos = departure.y_pos;
+    pos = new PVector(departure.x_pos, departure.y_pos);
+
+    // velocity vector
+    vel = new PVector(0, 0);
 
     // create trail ArrayList and add the starting point
     trail = new ArrayList<PVector>();
-    trail.add(new PVector(x_pos, y_pos));
+    trail.add(pos.copy());
   }
+  
   // METHODS
 
   // move the plane
-  void update(ArrayList<Plane> otherPlanes) {
+  void update() {
 
     // variables defining where we want to go
     float targetX = arrival.x_pos;
     float targetY = arrival.y_pos;
 
     // variables to calculate how far we still have to fly
-    dx = targetX - x_pos;
-    dy = targetY - y_pos;
-    d = dist(x_pos, y_pos, targetX, targetY);
+    dx = targetX - pos.x;
+    dy = targetY - pos.y;
+    d = dist(pos.x, pos.y, targetX, targetY);
     
     // plane will stop moving once it has arrived
     if (arrived) {
@@ -76,34 +85,39 @@ class Plane {
       dy = dy/d;
     }
 
-    // velocity must have a direction and a speed
-    vx = dx * speed;
-    vy = dy * speed;
+    // desired velocity toward destination
+    PVector desired = new PVector(dx * speed, dy * speed);
 
-    // change vx velocity to avoid any weather events that may be occuring
-    if (avoidWeather) {
-      vx += sin(frameCount * 0.03) * 0.05;
-      vy += sin(frameCount * 0.03) * 0.05;
-    }
+    // move velocity by 3% closer to the velocity we want every frame that is run 
+    vel.lerp(desired, 0.03);
 
     // avoid other planes using another method
     if (avoidPlanes) {
-      checkPlanes(otherPlanes);
+      checkPlanes();
     }
 
     // update plane position
-    x_pos += vx;
-    y_pos += vy;
+    pos.add(vel);
+
+    // store velocity components
+    vx = vel.x;
+    vy = vel.y;
 
     // update calculations like velocity/time/bearing
     updateFlightMetrics();
 
-    // save current position into trail
-    trail.add(new PVector(x_pos, y_pos));
+    // save current position into trail but only every 3 frames to reduce the lag time
+    if (frameCount % 3 == 0) {
+      trail.add(pos.copy());
+    }
+    if (trail.size() > 300) {
+      trail.remove(0);
+    }
 
     //the plane position will probably never be exactly the same as the arrival location
     // but if it is close enough, then mark it as arrived
-    float arrivalDistance = dist(x_pos, y_pos, arrival.x_pos, arrival.y_pos);
+    float arrivalDistance = dist(pos.x, pos.y, arrival.x_pos, arrival.y_pos);
+    
     if (arrivalDistance < 10) {
       arrived = true;
     }
@@ -116,7 +130,7 @@ class Plane {
     velocity = sqrt(vx * vx + vy * vy);
 
     // calculate instantaneous distance flown within this current frame
-    float instDistance = dist(x_pos, y_pos, x_pos - vx, y_pos - vy);
+    float instDistance = velocity;
 
     // add instantaneous distance to total travelled distance
     totalDistanceTravelled += instDistance;
@@ -128,36 +142,40 @@ class Plane {
     elapsedHours = kmTravelled / (velocity * velocityScale);
 
     // calculate bearing using another method
-    bearing = getBearing();
+    this.bearing = getBearing(dx, dy);
   }
 
   // check for other planes to try and avoid collisions
-  void checkPlanes(ArrayList<Plane> otherPlanes) {
+  void checkPlanes() {
 
     // check all other planes
-    for (Plane other : otherPlanes) {
-
+    for (int i = planes.size() - 1; i >= 0; i--) {
+      Plane other = planes.get(i);
+      
       // for every plane that isn't itself...
-      if (other != this) {
+      if (other != this && !other.arrived) {
 
         // calculate distance between planes, and if the plane is close by...
-        float d = dist(x_pos, y_pos, other.x_pos, other.y_pos);
+        float d = dist(pos.x, pos.y, other.pos.x, other.pos.y);
+        
         if (d < searchRadius) {
 
           // avoid vertically
-          if (x_pos < other.x_pos) {
+          if (pos.x < other.pos.x) {
             
             // agression value is how much the pilot will avoid other planes
-            vx -= this.aggression;
+            vel.x -= this.aggression;
+            
           } else {
-            vx += this.aggression;
+            vel.x += this.aggression;
           }
 
           // avoid horizontally
-          if (y_pos < other.y_pos) {
-            vy -= this.aggression;
+          if (pos.y < other.pos.y) {
+            vel.y -= this.aggression;
+            
           } else {
-            vy += this.aggression;
+            vel.y += this.aggression;
           }
         }
       }
@@ -170,14 +188,14 @@ class Plane {
     // calculate plane rotation angle = arctan(vy/vx)
     float angle = atan2(vy, vx);
 
-    // draw direct path from departure to arrival airport as a GREEN line
+    // draw direct path from departure to arrival airport as a green line
     if (showPath) {
       stroke(0, 255, 0);
       strokeWeight(2);
       line(departure.x_pos, departure.y_pos, arrival.x_pos, arrival.y_pos);
     }
 
-    // draw exhaust trail as WHITE line
+    // draw exhaust trail as white line
     if (showTrail) {
 
       stroke(255);
@@ -195,20 +213,20 @@ class Plane {
       endShape();
     }
 
-
     // draw the searchRadius circle which is used to detect other objects
     if (showRadius) {
       noFill();
       stroke(0, 255, 255);
-      circle(x_pos, y_pos, searchRadius * 2);
+      circle(pos.x, pos.y, searchRadius * 2);
     }
     
     // draw the actual plane
     if (visible) {    
+    
       // use push and pop matrix to rotate the image
       pushMatrix();
       
-      translate(x_pos, y_pos);
+      translate(pos.x, pos.y);
       rotate(angle);
       imageMode(CENTER);
       image(this.planeImg, 0, 0, 30, 30);
@@ -226,60 +244,12 @@ class Plane {
       
       pushMatrix();
     
-      translate(x_pos, y_pos);
+      translate(pos.x, pos.y);
       rotate(angle);
       triangle(12, 0, -8, -6, -8, 6);
     
       popMatrix();
     }
-  }
-
-  // calculate compass direction of the plane
-  String getBearing() {
-    float bearingAngle = 0;
-
-    // calculate angle based on direction vector
-    float angle = degrees(atan2(dx, -dy));
-  
-    // keep angle between 0 and 360 (a way to fix the bug we encountered)
-    if (angle < 0) {
-      angle += 360;
-    }
-  
-    // initialize first and second direction (Ex. N (primary) 10 W (secondary))
-    String primary = "";
-    String secondary = "";
-   
-   // direction is NE
-    if (angle >= 0 && angle < 90) {
-      primary = "N";
-      secondary = "E";
-      bearingAngle = angle;
-    }
-  
-    // direction is SE
-    else if (angle >= 90 && angle < 180) {
-      primary = "S";
-      secondary = "E";
-      bearingAngle = 180 - angle;
-    }
-  
-    // direction is SW
-    else if (angle >= 180 && angle < 270) {
-      primary = "S";
-      secondary = "W";
-      bearingAngle = angle - 180;
-    }
-  
-    // direction is NW
-    else {
-      primary = "N";
-      secondary = "W";
-      bearingAngle = 360 - angle;
-    }
-  
-    // return final calculated bearing as a string
-    return primary + " " + int(bearingAngle) + "° " + secondary;
   }
   
   // used to update the communication panel if selected object is a plane
@@ -290,19 +260,22 @@ class Plane {
     info += "DEPARTURE: " + this.departure.name + " Airport\n";
     info += "ARRIVAL: " + this.arrival.name + " Airport\n\n";
     info += "VELOCITY: " + nf(velocity * velocityScale, 0, 0) + " km/h\n";
-    info += "BEARING: " + bearing + "\n";
+    info += "BEARING: " + this.bearing + "\n";
     info += "TRAVEL TIME: " + nf(elapsedHours, 0, 1) + " hrs\n\n";
     info += "STATUS: ";
 
     if (arrived) {
       info += "ARRIVED";
     } 
-    else if (this.x_pos == this.departure.x_pos) {
+    
+    else if (pos.x == this.departure.x_pos) {
       info += "CURRENTLY BOARDING";
     }
+    
     else {
       info += "IN FLIGHT";
     }
+    
     return info;
   }
 }

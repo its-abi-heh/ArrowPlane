@@ -46,11 +46,16 @@ public void arrivalSelected(GDropList source, GEvent event) { //_CODE_:arrivalLi
 
 public void addPlanetoMap(GButton source, GEvent event) { //_CODE_:addPlane:926160:
   
-  if (departure != arrival) {
-    if (planes.size() < 8) {
+  if (departure != null && arrival != null && departure != arrival) {
+    if (planes.size() < 7) {
       String planeimg = "plane_" + planes.size() + ".png";
-      Plane p1 = new Plane(departure, arrival, planeimg);
-      planes.add(p1);
+      Plane p = new Plane(departure, arrival, planeimg);
+      planes.add(p);
+    }
+    
+    // max of 7 planes
+    else {
+       informationBox.setText("You cannot add more than 7 planes. Please clear planes to continue");   
     }
   }
 } //_CODE_:addPlane:926160:
@@ -85,24 +90,33 @@ synchronized public void createPlaneWindow(PApplet appc, GWinData data) { //_COD
 } //_CODE_:PlaneWindow:600548:
 
 public void pathVisibilityChanged(GCheckbox source, GEvent event) { //_CODE_:togglePath:714996:
-  selectedPlane.showPath = !selectedPlane.showPath;
+  if (selectedPlane != null) {
+    selectedPlane.showPath = !selectedPlane.showPath;
+  }
 } //_CODE_:togglePath:714996:
 
 public void trailVisibilityChanged(GCheckbox source, GEvent event) { //_CODE_:toggleTrail:827319:
-  selectedPlane.showTrail = !selectedPlane.showTrail;
-
+  if (selectedPlane != null) {
+    selectedPlane.showTrail = !selectedPlane.showTrail;
+  }
 } //_CODE_:toggleTrail:827319:
 
 public void searchRVisibilityChanged(GCheckbox source, GEvent event) { //_CODE_:toggleR:845871:
-  selectedPlane.showRadius = !selectedPlane.showRadius;
+  if (selectedPlane != null) {
+    selectedPlane.showRadius = !selectedPlane.showRadius;
+  }
 } //_CODE_:toggleR:845871:
 
 public void planeVisibilityChanged(GCheckbox source, GEvent event) { //_CODE_:togglePlane:731911:
-  selectedPlane.visible = !selectedPlane.visible;
+  if (selectedPlane != null) {
+    selectedPlane.visible = !selectedPlane.visible;
+  }
 } //_CODE_:togglePlane:731911:
 
 public void speedChanged(GSlider source, GEvent event) { //_CODE_:speedSlider:770580:
-  selectedPlane.speed = speedSlider.getValueF();
+  if (selectedPlane != null) {
+    selectedPlane.speed = speedSlider.getValueF();
+  }
 } //_CODE_:speedSlider:770580:
 
 

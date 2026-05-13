@@ -14,6 +14,54 @@ void createWeather() {
   }
 }
 
+// calculate compass direction of something
+  String getBearing(float x, float y) {
+    float bearingAngle = 0;
+
+    // calculate angle based on direction vector
+    float angle = degrees(atan2(x, -y));
+  
+    // keep angle between 0 and 360 (a way to fix the bug we encountered)
+    if (angle < 0) {
+      angle += 360;
+    }
+  
+    // initialize first and second direction (Ex. N (primary) 10 W (secondary))
+    String primary = "";
+    String secondary = "";
+   
+   // direction is NE
+    if (angle >= 0 && angle < 90) {
+      primary = "N";
+      secondary = "E";
+      bearingAngle = angle;
+    }
+  
+    // direction is SE
+    else if (angle >= 90 && angle < 180) {
+      primary = "S";
+      secondary = "E";
+      bearingAngle = 180 - angle;
+    }
+  
+    // direction is SW
+    else if (angle >= 180 && angle < 270) {
+      primary = "S";
+      secondary = "W";
+      bearingAngle = angle - 180;
+    }
+  
+    // direction is NW
+    else {
+      primary = "N";
+      secondary = "W";
+      bearingAngle = 360 - angle;
+    }
+  
+    // return final calculated bearing as a string
+    return primary + " " + int(bearingAngle) + "° " + secondary;
+  }
+
 void createCompass(float x, float y, float size) {
 
   // Outer circle
@@ -169,11 +217,11 @@ void mousePressed() {
   selectedPlane = null;
 
   // check if it is a plane that has been selected
-  for (int i = 0; i < planes.size(); i++) {
+  for (int i = planes.size() - 1; i >= 0; i--) {
       Plane p = planes.get(i);
       
     // if the user's click was within the search radius, the function returns true
-    if (checkObjectOfInterest(p.x_pos, p.y_pos)) {
+    if (checkObjectOfInterest(p.pos.x, p.pos.y)) {
 
       // assign values to selected plane and generate the plane window
       selectedPlane = p;
