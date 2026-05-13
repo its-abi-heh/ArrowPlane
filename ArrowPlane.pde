@@ -71,10 +71,12 @@ void draw() {
       createCompass(100, 100, 100); 
   }
   
-  // draw airports
+  // draw airports (two separate loops because the tags need to be drawn on top of the points
   for (Airport a : airports) {
     a.drawPoint();
-    
+  }
+  
+  for (Airport a : airports) {
     // if user has hovered over the airport, display tag information
     if (checkObjectOfInterest(a.x_pos, a.y_pos)) {
      a.drawTag(); 
