@@ -28,9 +28,11 @@ public void startButtonClicked(GButton source, GEvent event) { //_CODE_:startBut
   }
 } //_CODE_:startButton:752526:
 
-public void clearButtonClicked(GButton source, GEvent event) { //_CODE_:clearFlights:877504:
-  planes.clear();
+public void clearButtonClicked(GButton source, GEvent event) { 
+  selectedPlane = null;
+  PlaneWindow.setVisible(false);
   started = false;
+  planes.clear();
 } //_CODE_:clearFlights:877504:
 
 public void departureSelected(GDropList source, GEvent event) { //_CODE_:departureList:786137:
@@ -90,31 +92,31 @@ synchronized public void createPlaneWindow(PApplet appc, GWinData data) { //_COD
 } //_CODE_:PlaneWindow:600548:
 
 public void pathVisibilityChanged(GCheckbox source, GEvent event) { //_CODE_:togglePath:714996:
-  if (selectedPlane != null) {
+  if (selectedPlane != null && planes.contains(selectedPlane)) {
     selectedPlane.showPath = !selectedPlane.showPath;
   }
 } //_CODE_:togglePath:714996:
 
 public void trailVisibilityChanged(GCheckbox source, GEvent event) { //_CODE_:toggleTrail:827319:
-  if (selectedPlane != null) {
+  if (selectedPlane != null && planes.contains(selectedPlane)) {
     selectedPlane.showTrail = !selectedPlane.showTrail;
   }
 } //_CODE_:toggleTrail:827319:
 
 public void searchRVisibilityChanged(GCheckbox source, GEvent event) { //_CODE_:toggleR:845871:
-  if (selectedPlane != null) {
+if (selectedPlane != null && planes.contains(selectedPlane)) {
     selectedPlane.showRadius = !selectedPlane.showRadius;
   }
 } //_CODE_:toggleR:845871:
 
 public void planeVisibilityChanged(GCheckbox source, GEvent event) { //_CODE_:togglePlane:731911:
-  if (selectedPlane != null) {
+  if (selectedPlane != null && planes.contains(selectedPlane)) {
     selectedPlane.visible = !selectedPlane.visible;
   }
 } //_CODE_:togglePlane:731911:
 
 public void speedChanged(GSlider source, GEvent event) { //_CODE_:speedSlider:770580:
-  if (selectedPlane != null) {
+  if (selectedPlane != null && planes.contains(selectedPlane)) {
     selectedPlane.speed = speedSlider.getValueF();
   }
 } //_CODE_:speedSlider:770580:

@@ -139,8 +139,10 @@ class Plane {
     float kmTravelled = totalDistanceTravelled * kmScale;
 
     // calculate elapsed travel time = d/velocity
-    elapsedHours = kmTravelled / (velocity * velocityScale);
-
+    if (velocity> 0) {
+      elapsedHours = kmTravelled / (velocity * velocityScale);
+    }
+    
     // calculate bearing using another method
     this.bearing = getBearing(dx, dy);
   }
